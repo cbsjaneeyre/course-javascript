@@ -4,6 +4,21 @@ import photosDB from './photos.json';
 import friendsDB from './friends.json';
 
 export default {
-  getRandomElement(array) {},
-  getNextPhoto() {},
+  getRandomElement(array) {
+    if (array.length === 0) {
+      return null;
+    }
+
+    const i = parseInt(Math.random() * (array.length - 1));
+
+    return array[i];
+  },
+
+  getNextPhoto() {
+    const friend = this.getRandomElement(friendsDB);
+    const photos = photosDB[friend.id];
+    const photo = this.getRandomElement(photos);
+
+    return { friend, url: photo.url };
+  },
 };
