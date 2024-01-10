@@ -10,9 +10,12 @@
  Пример:
    createDivWithText('loftschool') // создаст элемент div, поместит в него 'loftschool' и вернет созданный элемент
  */
-function createDivWithText(text) {
-}
+function createDivWithText(text = 'some random words') {
+  const element = document.createElement('DIV');
+  element.textContent = text;
 
+  return element;
+}
 /*
  Задание 2:
 
@@ -21,9 +24,10 @@ function createDivWithText(text) {
  Пример:
    prepend(document.querySelector('#one'), document.querySelector('#two')) // добавит элемент переданный первым аргументом в начало элемента переданного вторым аргументом
  */
-function prepend(what, where) {
+function prepend(what = document.createElement('span'), where = document.createElement('div')) {
+  const result = where.prepend(what);
+  return result;
 }
-
 /*
  Задание 3:
 
@@ -43,9 +47,17 @@ function prepend(what, where) {
 
    findAllPSiblings(document.body) // функция должна вернуть массив с элементами div и span т.к. следующим соседом этих элементов является элемент с тегом P
  */
-function findAllPSiblings(where) {
-}
+function findAllPSiblings(where = document.body) {
+  const array = [];
 
+  for (let i = 0; i < where.children.length; i++) {
+    if (where.children[i].nextElementSibling === 'P' || where.children[i].tagName === 'P') {
+      array.push(where.children[i].previousElementSibling);
+    }
+  }
+
+  return array;
+}
 /*
  Задание 4:
 
@@ -66,13 +78,12 @@ function findAllPSiblings(where) {
 function findError(where) {
   const result = [];
 
-  for (const child of where.childNodes) {
+  for (const child of where.children) {
     result.push(child.textContent);
   }
 
   return result;
 }
-
 /*
  Задание 5:
 
@@ -86,8 +97,12 @@ function findError(where) {
    должно быть преобразовано в <div></div><p></p>
  */
 function deleteTextNodes(where) {
+  for (const node of where.childNodes) {
+    if (node.nodeType === 3) {
+      where.removeChild(node);
+    }
+  }
 }
-
 /*
  Задание 6 *:
 
@@ -109,6 +124,37 @@ function deleteTextNodes(where) {
    }
  */
 function collectDOMStat(root) {
+  const obj = {
+    tags: {},
+    classes: {},
+    texts: 0
+  };
+
+  function fn(root) {
+    for (const node of root.childNodes) {
+    if (node.nodeType === 3) {
+      obj.texts++;
+    } else if (node.nodeType === 1) {
+      if (node.tagName in obj.tags) {
+        obj.tags[node.tagName]++;
+      } else {
+        obj.tags[node.tagName] = 1;
+      }
+      for (const classElement of node.classList) {
+        if (classElement in obj.classes) {
+          obj.classes[classElement]++;
+        } else {
+          obj.classes[classElement] = 1;
+        }
+      }
+      
+      fn(node);
+    }
+  }
+}
+
+  fn(root);
+  return obj;
 }
 
 export {
