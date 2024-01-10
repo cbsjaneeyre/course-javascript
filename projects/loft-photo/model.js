@@ -9,7 +9,7 @@ export default {
       return null;
     }
 
-    const i = parseInt(Math.random() * (array.length - 1));
+    const i = parseInt(Math.random() * (array.length));
 
     return array[i];
   },
