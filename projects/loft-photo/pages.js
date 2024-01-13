@@ -6,16 +6,15 @@ const pagesMap = {
 
 export default {
   openPage(name) {
-    const page = document.querySelector('.page');
+    let currentPage = null;
+    const selector = pagesMap[name];
+    const page = document.querySelector(selector);
 
-    page.addEventListener('click', (e) => {
-      e.preventDefault();
-
-      if (name === page.classList.contains('page-login')) {
-        name.classList.remove('hidden');
-      } else (name === page.classList.containe('page-main')) {
-        name.classList.remove('hidden');
-      } 
-    });
+    if (currentPage != null) {
+      currentPage.classList.add('hidden');
+      currentPage = page;
+    } else {
+      currentPage.classList.remove('hidden');
+    }
   },
 };
