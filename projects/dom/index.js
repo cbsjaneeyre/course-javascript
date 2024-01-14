@@ -51,8 +51,12 @@ function findAllPSiblings(where = document.body) {
   const array = [];
 
   for (let i = 0; i < where.children.length; i++) {
-    if (where.children[i].nextElementSibling === 'P' || where.children[i].tagName === 'P') {
+    if (where.children[i].nextElementSibling === 'P') {
       array.push(where.children[i].previousElementSibling);
+    } else if (where.children[i].tagName !== 'P') {
+      array.push(where.children[i]);
+    } else {
+      return null;
     }
   }
 
