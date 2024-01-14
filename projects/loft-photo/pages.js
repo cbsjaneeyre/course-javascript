@@ -10,11 +10,11 @@ export default {
     const selector = pagesMap[name];
     const page = document.querySelector(selector);
 
-    if (currentPage != null) {
+    if (currentPage) {
+      currentPage.classList.remove('hidden');
+    } else if (!currentPage) {
       currentPage.classList.add('hidden');
       currentPage = page;
-    } else {
-      currentPage.classList.remove('hidden');
     }
   },
 };
