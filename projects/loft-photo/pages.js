@@ -4,17 +4,16 @@ const pagesMap = {
   profile: '.page-profile',
 };
 
+let currentPage = null;
+
 export default {
   openPage(name) {
-    let currentPage = null;
     const selector = pagesMap[name];
-    const page = document.querySelector(selector);
+    const element = document.querySelector(selector);
 
-    if (currentPage) {
-      currentPage.classList.remove('hidden');
-    } else if (!currentPage) {
-      currentPage.classList.add('hidden');
-      currentPage = page;
-    }
+    currentPage?.classList.add('hidden');
+    currentPage = element;
+    currentPage.classList.remove('hidden');
+
   },
 };
