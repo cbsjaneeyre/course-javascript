@@ -1,8 +1,3 @@
-// eslint-disable-next-line no-unused-vars
-import photosDB from './photos.json';
-// eslint-disable-next-line no-unused-vars
-import friendsDB from './friends.json';
-
 export default {
   getRandomElement(array) {
     if (array.length === 0) {
@@ -14,11 +9,92 @@ export default {
     return array[i];
   },
 
-  getNextPhoto() {
-    const friend = this.getRandomElement(friendsDB);
-    const photos = photosDB[friend.id];
-    const photo = this.getRandomElement(photos);
+  async getNextPhoto() {
+    const friend = this.getRandomElement(this.friends.items);
+    const photos = await this.getFriendPhotos(friend.id);
+    const photo = this.getRandomElement(photos.items);
+    const size = this.findSize(photo);
 
-    return { friend, url: photo.url };
+    return { friend, id: photo.id, url: size.url };
+  },
+
+  findSize(photo) {
+    const size = photo.sizes.find((size) => size.width >= 360);
+
+    if (!size) {
+      return photo.sizes.reduce((biggest, current) => {
+        if (current.width > biggest.width) {
+          return current;
+        }
+
+        return biggest;
+      }, photo.sizes[0]);
+    }
+  },
+
+  async init() {
+    this.photoCache = {};
+    this.friends = await this.getFriends();
+  },
+
+  login() {
+    VK.init({
+      apiId: 51833952
+    });
+
+    return new Promise((resolve, reject) => {
+      VK.Auth.login((data) => {
+        if (data.session) {
+          resolve(data);
+        } else {
+          console.error(data);
+          reject(data);
+        }
+      }, 2 | 4);
+    });
+  },
+
+  callAPI(method, params) {
+    params.v = '5.199';
+
+    return new Promise((resolve, reject) => {
+      VK.api(method, params, (data) => {
+        if (data.error) {
+          reject(new Error(data.error.error_msg));
+        } else {
+          resolve(data.response);
+        }
+      });
+    });
+  },
+
+  getFriends() {
+    const params = {
+      fields: ['photo_50', 'photos_100'],
+    };
+
+    return this.callAPI('friends.get', params);
+  },
+
+  getPhotos(owner) {
+    const params = {
+      owner_id: owner,
+    };
+
+    return this.callAPI('photos.getAll', params);
+  },
+
+  async getFriendPhotos(id) {
+    let photos = this.photoCache[id];
+
+    if (photos) {
+      return photos;
+    }
+
+    photos = await this.getPhotos(id);
+
+    this.photoCache[id] = photos;
+
+    return photos;
   },
 };
