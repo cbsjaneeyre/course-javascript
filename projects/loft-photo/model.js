@@ -1,4 +1,4 @@
-const APP_ID = 51838474;
+const APP_ID = 51838519;
 
 export default {
   getRandomElement(array) {
@@ -32,6 +32,7 @@ export default {
         return biggest;
       }, photo.sizes[0]);
     }
+    
     return size;
   },
 
