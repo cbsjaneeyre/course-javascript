@@ -1,3 +1,5 @@
+const APP_ID = 51838474;
+
 export default {
   getRandomElement(array) {
     if (array.length === 0) {
@@ -30,6 +32,7 @@ export default {
         return biggest;
       }, photo.sizes[0]);
     }
+    return size;
   },
 
   async init() {
@@ -37,12 +40,14 @@ export default {
     this.friends = await this.getFriends();
   },
 
-  login() {
-    VK.init({
-      apiId: 51833952
-    });
+  photoCache: {},
 
+  login() {
     return new Promise((resolve, reject) => {
+      VK.init({
+        apiId: APP_ID,
+      });
+
       VK.Auth.login((data) => {
         if (data.session) {
           resolve(data);
