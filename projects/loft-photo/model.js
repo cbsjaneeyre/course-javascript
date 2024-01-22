@@ -1,5 +1,3 @@
-const APP_ID = 51838519;
-
 export default {
   getRandomElement(array) {
     if (array.length === 0) {
@@ -46,7 +44,7 @@ export default {
   login() {
     return new Promise((resolve, reject) => {
       VK.init({
-        apiId: APP_ID,
+        apiId: 51838519,
       });
 
       VK.Auth.login((data) => {
