@@ -10,16 +10,65 @@ const DB = {
 
 const methods = {
   like(req, res, url, vkUser) {
-    // todo
+    const photoID = url.searchParams.get('photo'); // получаем параметр photo из url, где передается id фото
+    let photoLikes = DB.likes.get(photoID); // получаем все лайки фото, у которой передали id
+
+    // делаем проверку, если на фото еще нет лайков, если photoLikes пустой, undefined
+    if (!photoLikes) {
+      photoLikes = new Map(); // создаем коллекцию для хранения лайков фото
+      DB.likes.set(photoID, photoLikes); // передаем коллекцию лайков для фото (пустой, чтобы был)
+    }
+
+    // снимаем лайк, если пользователь (мы) уже лайкнул фото
+    if (photoLikes.get(vkUser.id)) {
+      photoLikes.delete(vkUser.id);
+
+      return {
+        likes: photoLikes.size, // количество лайков
+        liked: false
+      };
+    }
+
+    // ставим лайк, если его не было
+    photoLikes.set(vkUser.id, true);
+
+    return {
+      likes: photoLikes.size,
+      liked: true
+    };
   },
+
   photoStats(req, res, url, vkUser) {
-    // todo
+    const photoID = url.searchParams.get('photo');
+    const photoLikes = DB.likes.get(photoID);
+    const photoComments = DB.comments.get(photoID); // получаем все комментарии под фото, у которой передали id
+
+    return {
+      likes: photoLikes?.size ?? 0, // количество лайков
+      liked: photoLikes?.has(vkUser.id) ?? false, // лайкнута ли мы фото или нет
+      comments: photoComments?.length ?? 0 // количество комментариев
+    }
   },
+
   postComment(req, res, url, vkUser, body) {
-    // todo
+    const photoID = url.searchParams.get('photo');
+    let photoComments = DB.comments.get(photoID);
+
+    if (!photoComments) {
+      photoComments = []; // массив, метод карты соответствия (map) не нужен, так как комменты не удаляем, как лайки
+      DB.comments.set(photoID, photoComments);
+    }
+
+    // добавляем комментарий к фото в начале
+    photoComments.unshift({
+      user: vkUser,
+      text: body.text
+    });
   },
+
   getComments(req, res, url) {
-    // todo
+    const photoID = url.searchParams.get('photo');
+    return DB.comments.get(photoID) ?? []; // получаем список всех комментариев к фото, если там ничего нет - пустой массив
   },
 };
 
