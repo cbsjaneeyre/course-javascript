@@ -144,7 +144,7 @@ export default {
       params.body = JSON.stringify(body);
     }
 
-    const response = await fetch(`/loft-photo/api/${query}`, params);
+    const response = await fetch(`/loft-photo/api/?${query}`, params);
 
     return response.json();
   },

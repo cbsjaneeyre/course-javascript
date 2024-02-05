@@ -31,7 +31,6 @@ const methods = {
 
     // ставим лайк, если его не было
     photoLikes.set(vkUser.id, true);
-
     return {
       likes: photoLikes.size,
       liked: true
@@ -46,7 +45,7 @@ const methods = {
     return {
       likes: photoLikes?.size ?? 0, // количество лайков
       liked: photoLikes?.has(vkUser.id) ?? false, // лайкнута ли мы фото или нет
-      comments: photoComments?.length ?? 0 // количество комментариев
+      comments: photoComments?.length ?? 0, // количество комментариев
     }
   },
 

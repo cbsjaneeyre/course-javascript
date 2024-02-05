@@ -1,5 +1,4 @@
 import pages from './pages';
-import model from './model';
 import profilePage from './profilePage';
 import('./styles.css');
 

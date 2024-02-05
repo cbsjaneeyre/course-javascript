@@ -9,7 +9,7 @@ export default {
   async getNextPhoto() {
     const { friend, id, url } = await model.getNextPhoto();
     const photoStats = await model.photoStats(id);
-    this.setFriendAndPhoto(friend, id, url);
+    this.setFriendAndPhoto(friend, id, url, photoStats);
   },
 
   setFriendAndPhoto(friend, id, url, stats) {
@@ -98,7 +98,7 @@ export default {
         return {
           name: `${comment.user.first_name ?? ''} ${comment.user.last_name ?? ''}`,
           photo: comment.user.photo_50,
-          text: comment.text
+          text: comment.text,
         };
       }),
     });
