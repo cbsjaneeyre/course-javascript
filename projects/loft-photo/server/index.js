@@ -25,7 +25,7 @@ const methods = {
 
       return {
         likes: photoLikes.size, // количество лайков
-        liked: false
+        liked: false,
       };
     }
 
@@ -33,7 +33,7 @@ const methods = {
     photoLikes.set(vkUser.id, true);
     return {
       likes: photoLikes.size,
-      liked: true
+      liked: true,
     };
   },
 
@@ -61,7 +61,7 @@ const methods = {
     // добавляем комментарий к фото в начале
     photoComments.unshift({
       user: vkUser,
-      text: body.text
+      text: body.text,
     });
   },
 

@@ -38,8 +38,9 @@ export default {
         const friendPhotos = await model.getPhotos(this.user.id);
         const photo = friendPhotos.items.find((photo) => photo.id == photoID);
         const size = model.findSize(photo);
+        const photoStats = await model.photoStats(photo.id);
 
-        mainPage.setFriendAndPhoto(this.user, parseInt(photoID), size.url);
+        mainPage.setFriendAndPhoto(this.user, parseInt(photoID), size.url, photoStats);
         pages.openPage('main');
       }
     });
