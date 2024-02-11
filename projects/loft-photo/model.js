@@ -78,10 +78,14 @@ export default {
     });
   },
 
-  getFriends() {
+  getFriends(id) {
     const params = {
       fields: ['photo_50', 'photo_100'],
     };
+
+    if (id != null) {
+      params.user_id = id;
+    }
 
     return this.callAPI('friends.get', params);
   },
